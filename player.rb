@@ -5,8 +5,8 @@ class Player
   BASE_URL = "https://api.spotify.com"
 
   def initialize(access_token:, target_device_id:, target_playlist_id:)
-    @header = {
-      "Authorization" => "Bearer #{@access_token}",
+    @headers = {
+      "Authorization" => "Bearer #{access_token}",
       "Content-Type" => "application/json",
     }
     @target_device_id = target_device_id
@@ -22,7 +22,7 @@ class Player
 
     response = connection.get("/v1/me/player")
 
-    response.body
+    { status: response.status, body: response.body }
   end
 
   def devices
@@ -34,7 +34,7 @@ class Player
 
     response = connection.get("/v1/me/player/devices")
 
-    response.body
+    { status: response.status, body: response.body }
   end
 
   def play
@@ -50,7 +50,7 @@ class Player
       }.to_json
     end
 
-    response.body
+    { status: response.status, body: response.body }
   end
 
   def pause
@@ -62,7 +62,7 @@ class Player
 
     response = connection.put("/v1/me/player/pause")
 
-    response.body
+    { status: response.status, body: response.body }
   end
 
   def next
@@ -72,9 +72,9 @@ class Player
       headers: @headers
     )
 
-    response = connection.put("/v1/me/player/next")
+    response = connection.post("/v1/me/player/next")
 
-    response.body
+    { status: response.status, body: response.body }
   end
 
   def enable_shuffle
@@ -86,6 +86,6 @@ class Player
 
     response = connection.put("/v1/me/player/shuffle")
 
-    response.body
+    { status: response.status, body: response.body }
   end
 end

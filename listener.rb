@@ -7,13 +7,20 @@ class Listener
     @server = TCPServer.new(host, port)
   end
 
-  def receive_command
+  def receive_command(auto_close: true)
     request = listen
     command = extract(request)
-    reply(command)
-    close
+
+    if auto_close
+      close(message: "Received command: \"#{command}\"")
+    end
 
     return command
+  end
+
+  def close(message:)
+    reply(message: message)
+    @session.close
   end
 
   private
@@ -26,21 +33,21 @@ class Listener
   def extract(request)
     match = EXTRACTION_PATTERN.match(request)
 
-    if match.nil?
-      ""
-    else
-      match[1]
-    end
+    command =
+      if match.nil?
+        ""
+      else
+        match[1]
+      end
+
+    command.downcase
   end
 
-  def reply(extracted_command)
+  def reply(message:)
     @session.print("HTTP/1.1 200/OK\r\n")
     @session.print("Content-Type: text/html\r\n")
     @session.print("\r\n")
-    @session.print("Extracted command: \"#{extracted_command}\"\r\n\r\n")
-  end
-
-  def close
-    @session.close
+    @session.print(message)
+    @session.print("\r\n\r\n")
   end
 end
