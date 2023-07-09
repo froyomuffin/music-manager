@@ -19,15 +19,15 @@ class Service
     )
 
     loop do
+      command = listener.receive_command(auto_close: false)
+      puts "Received command \"#{command}\""
+
       access_token = generator.generate
       player = Player.new(
         access_token: access_token,
         target_device_id: ENV["SPOTIFY_TARGET_DEVICE_ID"],
         target_playlist_id: ENV["SPOTIFY_TARGET_PLAYLIST_ID"],
       )
-
-      command = listener.receive_command(auto_close: false)
-      puts "Received command \"#{command}\""
 
       case command
       when "music"
