@@ -30,17 +30,17 @@ class Service
       )
 
       case command
-      when "music"
-        player.enable_shuffle
-        result = player.play
-        puts result
-        listener.close(message: result)
       when "play"
+        player.enable_shuffle
         result = player.play
         puts result
         listener.close(message: result)
       when "pause"
         result = player.pause
+        puts result
+        listener.close(message: result)
+      when "resume"
+        result = player.resume
         puts result
         listener.close(message: result)
       when "next"

@@ -65,6 +65,18 @@ class Player
     { status: response.status, body: response.body }
   end
 
+  def resume
+    connection = Faraday.new(
+      url: BASE_URL,
+      params: { device_id: @target_device_id },
+      headers: @headers
+    )
+
+    response = connection.put("/v1/me/player/play")
+
+    { status: response.status, body: response.body }
+  end
+
   def next
     connection = Faraday.new(
       url: BASE_URL,
