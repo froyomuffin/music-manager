@@ -47,6 +47,10 @@ class Service
         result = player.next
         puts result
         listener.close(message: result)
+      when "devices"
+        result = player.devices
+        puts result
+        listener.close(message: result)
       else
         puts "Error: Unknown command"
       end
